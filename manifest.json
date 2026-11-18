@@ -1,0 +1,23 @@
+{
+  "name": "Mevunai Moment Country Club",
+  "short_name": "MMEL",
+  "description": "Private luxury members portal for Mevunai Moment Country Club, MM'EL Radio, and Mevunai Moment TV.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#031710",
+  "theme_color": "#063b29",
+  "icons": [
+    {
+      "src": "mmel-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "mmel-icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
