@@ -1,10 +1,10 @@
 {
-  "name": "Mevunai Moment™ Flagship Couture & Atelier",
-  "short_name": "MM Atelier",
+  "name": "Mevunai Moment Flagship Couture & Atelier",
+  "short_name": "M'M Atelier",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#2a040b",
-  "theme_color": "#2a040b",
+  "background_color": "#240308",
+  "theme_color": "#32050b",
   "icons": [
     {
       "src": "atelier-icon.png",
