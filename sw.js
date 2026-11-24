@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mmcc-atelier-v9-network-first';
+const CACHE_NAME = 'mmcc-atelier-v14-inline-fixed';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
