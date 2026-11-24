@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#3a0712" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Mevunai Moment™ — Flagship Couture & Atelier</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="atelier-icon.png" />
+  <style>
+    :root {
+      --bg-deep: #24040b;
+      --bg-mid: #3a0712;
+      --bg-card: rgba(45, 6, 15, 0.92);
+      --gold: #d4af37;
+      --gold-bright: #f3d778;
+      --gold-dim: rgba(212, 175, 55, 0.35);
+      --text-main: #fdf8ee;
+      --text-muted: #d8c7a8;
+      --accent-glow: rgba(212, 175, 55, 0.18);
+    }
+    body.emerald-theme {
+      --bg-deep: #041d15;
+      --bg-mid: #082e22;
+      --bg-card: rgba(7, 38, 28, 0.92);
+      --gold: #d4af37;
+      --gold-bright: #f5dc82;
+      --gold-dim: rgba(212, 175, 55, 0.38);
+      --accent-glow: rgba(16, 185, 129, 0.18);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: radial-gradient(circle at top, var(--bg-mid), var(--bg-deep) 80%);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding-bottom: 92px;
+      overflow-x: hidden;
+    }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(20, 3, 7, 0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--gold-dim);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    body.emerald-theme .topbar { background: rgba(3, 20, 14, 0.94); }
+    .brand-lockup { display: flex; align-items: center; gap: 10px; }
+    .brand-crest {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1.5px solid var(--gold);
+      object-fit: cover;
+      background: #1a0308;
+    }
+    .brand-title { font-size: 13px; letter-spacing: 1.6px; color: var(--gold-bright); font-weight: bold; }
+    .brand-sub { font-size: 10px; letter-spacing: 1.2px; color: var(--text-muted); margin-top: 2px; }
+    .theme-btn {
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold-bright);
+      padding: 6px 11px;
+      border-radius: 20px;
+      font-size: 10px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+    .hero-banner-wrap {
+      margin: 14px 16px;
+      border: 1.5px solid var(--gold);
+      border-radius: 14px;
+      overflow: hidden;
+      background: linear-gradient(145deg, rgba(65,10,22,0.9), rgba(25,3,8,0.98));
+      box-shadow: 0 10px 30px rgba(0,0,0,0.55);
+      position: relative;
+    }
+    .hero-img {
+      width: 100%;
+      max-height: 210px;
+      object-fit: cover;
+      display: block;
+    }
+    .hero-fallback {
+      padding: 24px 16px;
+      text-align: center;
+    }
+    .hero-kicker { font-size: 10px; letter-spacing: 2.5px; color: var(--gold); text-transform: uppercase; }
+    .hero-main { font-size: 20px; letter-spacing: 2px; color: var(--gold-bright); margin: 6px 0; }
+    .hero-tag { font-size: 11px; color: var(--text-muted); letter-spacing: 1px; }
+    .section { display: none; padding: 0 16px; }
+    .section.active { display: block; }
+    .cat-pills {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 4px 0 14px;
+      scrollbar-width: none;
+    }
+    .cat-pills::-webkit-scrollbar { display: none; }
+    .pill {
+      flex: 0 0 auto;
+      padding: 7px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--gold-dim);
+      background: rgba(0,0,0,0.3);
+      color: var(--text-muted);
+      font-size: 11px;
+      letter-spacing: 0.8px;
+      cursor: pointer;
+    }
+    .pill.active {
+      background: linear-gradient(135deg, #d4af37, #aa821c);
+      color: #1c0409;
+      font-weight: bold;
+      border-color: var(--gold-bright);
+    }
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 640px) {
+      .catalog-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .item-card {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-dim);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.45);
+      display: flex;
+      flex-direction: column;
+    }
+    .media-box {
+      position: relative;
+      width: 100%;
+      height: 230px;
+      background: radial-gradient(circle, rgba(212,175,55,0.14), rgba(15,2,5,0.95));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-bottom: 1px solid var(--gold-dim);
+    }
+    .media-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .media-placeholder {
+      text-align: center;
+      padding: 16px;
+      color: var(--gold);
+    }
+    .media-placeholder .crest-glyph { font-size: 32px; margin-bottom: 6px; }
+    .media-placeholder span { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; display: block; color: var(--text-muted); }
+    .swap-photo-btn {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(15, 2, 5, 0.85);
+      border: 1px solid var(--gold);
+      color: var(--gold-bright);
+      padding: 5px 10px;
+      border-radius: 16px;
+      font-size: 10px;
+      letter-spacing: 0.8px;
+      cursor: pointer;
+    }
+    .cat-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(15, 2, 5, 0.82);
+      border: 1px solid var(--gold-dim);
+      color: var(--gold-bright);
+      padding: 4px 9px;
+      border-radius: 12px;
+      font-size: 9px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+    .card-body { padding: 14px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .item-title { font-size: 16px; color: var(--gold-bright); margin-bottom: 5px; }
+    .item-desc { font-size: 12px; color: var(--text-muted); line-height: 1.45; margin-bottom: 12px; }
+    .item-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(212,175,55,0.18);
+    }
+    .item-price { font-size: 15px; font-weight: bold; color: var(--gold); }
+    .gold-btn {
+      background: linear-gradient(135deg, #e5c158, #b58d22);
+      color: #1c0409;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 0.8px;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+    .panel-box {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-dim);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    .panel-title { font-size: 15px; color: var(--gold-bright); letter-spacing: 1px; margin-bottom: 10px; text-transform: uppercase; }
+    label { display: block; font-size: 11px; color: var(--gold); letter-spacing: 1px; margin: 10px 0 5px; text-transform: uppercase; }
+    select, input[type="text"], textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--gold-dim);
+      background: rgba(12, 2, 4, 0.85);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 13px;
+    }
+    .swatch-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+    .swatch {
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--gold-dim);
+      font-size: 11px;
+      cursor: pointer;
+      background: rgba(0,0,0,0.35);
+      color: var(--text-main);
+    }
+    .swatch.selected { border-color: var(--gold-bright); background: var(--accent-glow); color: var(--gold-bright); font-weight: bold; }
+    .bag-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(212,175,55,0.18);
+      font-size: 13px;
+    }
+    .remove-btn {
+      background: transparent;
+      border: 1px solid rgba(248,113,113,0.5);
+      color: #fca5a5;
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      cursor: pointer;
+    }
+    .vip-card {
+      background: linear-gradient(145deg, #4b0918, #1e0309);
+      border: 2px solid var(--gold);
+      border-radius: 18px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.65);
+    }
+    body.emerald-theme .vip-card { background: linear-gradient(145deg, #0b3b2c, #031710); }
+    .vip-banner { width: 100%; max-height: 170px; object-fit: cover; border-radius: 12px; border: 1px solid var(--gold); margin-bottom: 14px; }
+    .footer-stamp {
+      text-align: center;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: var(--gold);
+      margin: 22px 0 10px;
+      opacity: 0.85;
+    }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 50;
+      background: rgba(16, 2, 5, 0.97);
+      border-top: 1px solid var(--gold);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 8px 4px 12px;
+    }
+    body.emerald-theme .bottom-nav { background: rgba(2, 16, 11, 0.97); }
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      font-size: 10px;
+      letter-spacing: 0.6px;
+      cursor: pointer;
+    }
+    .nav-btn.active { color: var(--gold-bright); font-weight: bold; }
+    .nav-icon { font-size: 17px; }
+    .toast {
+      position: fixed;
+      top: 72px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #140307;
+      border: 1px solid var(--gold-bright);
+      color: var(--gold-bright);
+      padding: 10px 18px;
+      border-radius: 24px;
+      font-size: 12px;
+      z-index: 99;
+      display: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+    }
+  </style>
+</head>
+<body>
+  <div class="toast" id="toast"></div>
+
+  <header class="topbar">
+    <div class="brand-lockup">
+      <img src="atelier-icon.png" alt="Crest" class="brand-crest" onerror="this.style.display='none'" />
+      <div>
+        <div class="brand-title">MEVUNAI MOMENT™</div>
+        <div class="brand-sub">FLAGSHIP COUTURE & ATELIER · M'M™</div>
+      </div>
+    </div>
+    <button class="theme-btn" id="themeToggle">Emerald Silk</button>
+  </header>
+
+  <div class="hero-banner-wrap">
+    <img src="banner-hero.png" alt="Mevunai Moment Flagship Couture" class="hero-img"
+         onerror="this.style.display='none'; document.getElementById('heroFallback').style.display='block';" />
+    <div class="hero-fallback" id="heroFallback" style="display:none;">
+      <div class="hero-kicker">▲ EYE OF HORUS · EST. 2026 ▲</div>
+      <div class="hero-main">FLAGSHIP COUTURE & ATELIER</div>
+      <div class="hero-tag">M'M™ countryclub.inc · BESPOKE SIGNATURE COLLECTION</div>
+    </div>
+  </div>
+
+  <!-- TAB 1: LOOKBOOK -->
+  <section class="section active" id="tab-lookbook">
+    <div class="cat-pills" id="catPills">
+      <button class="pill active" data-cat="All">All Collections</button>
+      <button class="pill" data-cat="Tailoring">Tailoring & Moto</button>
+      <button class="pill" data-cat="Horology">Horology</button>
+      <button class="pill" data-cat="Golf">Golf & Country Club</button>
+      <button class="pill" data-cat="Gala">Evening Gala</button>
+      <button class="pill" data-cat="Accessories">Accessories</button>
+    </div>
+    <div class="catalog-grid" id="catalogGrid"></div>
+    <div class="footer-stamp">mevunai Moment™ Country Club, Inc ®</div>
+  </section>
+
+  <!-- TAB 2: BESPOKE COMMISSION -->
+  <section class="section" id="tab-bespoke">
+    <div class="panel-box">
+      <div class="panel-title">1325 Bespoke Atelier Commission</div>
+      <label>Silhouette & Garment Base</label>
+      <select id="bespokeBase">
+        <option value="Sovereign Circuit Silk-Velvet Moto Jacket|4850">Sovereign Circuit Silk-Velvet Moto Jacket ($4,850)</option>
+        <option value="1325 Sacred Geometry Double-Breasted Overcoat|6200">1325 Sacred Geometry Double-Breasted Overcoat ($6,200)</option>
+        <option value="Sovereign Crimson Draped Evening Gown|7400">Sovereign Crimson Draped Evening Gown ($7,400)</option>
+        <option value="MMCC Armored Superbike Racing Jacket|5300">MMCC Armored Superbike Racing Jacket ($5,300)</option>
+      </select>
+
+      <label>House Textile & Colorway</label>
+      <div class="swatch-row" id="fabricSwatches">
+        <div class="swatch selected" data-val="Royal Crimson Silk">Royal Crimson Silk</div>
+        <div class="swatch" data-val="Forest Emerald Velvet">Forest Emerald Velvet</div>
+        <div class="swatch" data-val="Ivory Gala Satin">Ivory Gala Satin</div>
+      </div>
+
+      <label>Hardware & Embroidery</label>
+      <div class="swatch-row" id="hardwareSwatches">
+        <div class="swatch selected" data-val="24K Brushed Gold Circuit">24K Brushed Gold Circuit</div>
+        <div class="swatch" data-val="RA 109 Pyramid Crest">RA 109 Pyramid Crest</div>
+        <div class="swatch" data-val="Emerald Bezel Studs">Emerald Bezel Studs</div>
+      </div>
+
+      <label>Tailoring Size & Monogram</label>
+      <input type="text" id="bespokeNotes" placeholder="e.g. IT 50 / US 40 · Monogram: M'M 001" />
+
+      <div style="margin-top:16px;">
+        <button class="gold-btn" style="width:100%; padding:12px;" id="addBespokeBtn">Commission & Add to Order Bag</button>
+      </div>
+    </div>
+    <div class="footer-stamp">mevunai Moment™ Country Club, Inc ®</div>
+  </section>
+
+  <!-- TAB 3: ORDER BAG -->
+  <section class="section" id="tab-bag">
+    <div class="panel-box">
+      <div class="panel-title">Private Concierge Order Bag</div>
+      <div id="bagItems"></div>
+      <div style="display:flex; justify-content:space-between; margin-top:14px; font-size:15px; color:var(--gold-bright);">
+        <span>Estimated Atelier Total</span>
+        <strong id="bagTotal">$0</strong>
+      </div>
+      <button class="gold-btn" style="width:100%; padding:12px; margin-top:14px;" id="checkoutBtn">Dispatch to Private Tailor Concierge</button>
+    </div>
+    <div class="footer-stamp">mevunai Moment™ Country Club, Inc ®</div>
+  </section>
+
+  <!-- TAB 4: VIP PASS -->
+  <section class="section" id="tab-vip">
+    <div class="vip-card">
+      <img src="banner-pass.png" alt="Sovereign Wardrobe Pass" class="vip-banner" onerror="this.style.display='none'" />
+      <div style="font-size:10px; letter-spacing:2px; color:var(--gold);">SOVEREIGN ATELIER CREDENTIAL</div>
+      <div style="font-size:20px; color:var(--gold-bright); margin:6px 0;">FOUNDER · MEMBER 001</div>
+      <div style="font-size:12px; color:var(--text-muted); margin-bottom:14px;">PASS ID: MMCC-ATELIER-1325-001 · PRIVATE FITTING SUITE</div>
+      <div style="border-top:1px solid var(--gold-dim); padding-top:12px; font-size:11px; color:var(--gold);">
+        mevunai Moment™ Country Club, Inc ®
+      </div>
+    </div>
+  </section>
+
+  <input type="file" id="photoFileInput" accept="image/*" style="display:none;" />
+
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-tab="lookbook"><span class="nav-icon">🧥</span>Lookbook</button>
+    <button class="nav-btn" data-tab="bespoke"><span class="nav-icon">✂️</span>Bespoke</button>
+    <button class="nav-btn" data-tab="bag"><span class="nav-icon">🛍️</span>Order Bag (<span id="bagCount">0</span>)</button>
+    <button class="nav-btn" data-tab="vip"><span class="nav-icon">👑</span>VIP Pass</button>
+  </nav>
+
+  <script>
+    var ITEMS = [
+      { id: "look1", cat: "Tailoring", title: "Sovereign Circuit Silk-Velvet Moto Jacket", desc: "Royal crimson silk & crushed velvet moto silhouette with 24K gold circuit-board embroidery and Eye of Horus lapel pyramids.", price: 4850, img: "look1.png" },
+      { id: "look2", cat: "Tailoring", title: "Emerald Matrix Turtleneck & Continent Chain", desc: "Forest emerald velvet knit interlaced with gold circuit filigree and a 24K brushed gold medallion chain.", price: 3200, img: "look2.png" },
+      { id: "look3", cat: "Tailoring", title: "1325 Sacred Geometry Gala Overcoat", desc: "Double-breasted royal crimson silk-velvet evening coat finished with engraved gold crest buttons.", price: 6200, img: "look3.png" },
+      { id: "look4", cat: "Tailoring", title: "MMCC Armored Superbike Racing Jacket", desc: "Emerald and crimson motorsport shell reinforced with brushed gold shoulder armor plates and circuit piping.", price: 5300, img: "look4.png" },
+      { id: "look5", cat: "Horology", title: "Pharaoh Chronograph Watch (18K Gold)", desc: "Octagonal brushed gold bezel, crimson sunray circuit dial, RA aperture, and 3D Pyramid Eye of Horus.", price: 18500, img: "look5.png" },
+      { id: "look6", cat: "Golf", title: "Championship Tour Golf Bag (MEMB. 001)", desc: "Dark forest emerald pebble-grain leather tour bag with gold geometric stitching and matching 1-3-5 headcovers.", price: 4400, img: "look6.png" },
+      { id: "look7", cat: "Gala", title: "Sovereign Crimson Silk Draped Evening Gown", desc: "Floor-length crimson silk column gown sculpted with a 24K gold circuit corset waist and Eye of Horus clasp.", price: 7400, img: "look7.png" },
+      { id: "look8", cat: "Accessories", title: "Bespoke Weekender, Velvet Loafers & Aviators", desc: "Emerald leather weekender duffle, crimson velvet crest loafers, and 24K gold-framed circuit aviators.", price: 3950, img: "look8.png" }
+    ];
+
+    var activeCat = "All";
+    var bag = [];
+    var customPhotos = {};
+    var pendingPhotoId = null;
+
+    try {
+      var saved = localStorage.getItem("mmcc_atelier_photos_v9");
+      if (saved) customPhotos = JSON.parse(saved);
+    } catch (e) {}
+
+    function showToast(msg) {
+      var t = document.getElementById("toast");
+      t.textContent = msg;
+      t.style.display = "block";
+      setTimeout(function() { t.style.display = "none"; }, 2400);
+    }
+
+    function renderCatalog() {
+      var grid = document.getElementById("catalogGrid");
+      grid.innerHTML = "";
+      ITEMS.forEach(function(item) {
+        if (activeCat !== "All" && item.cat !== activeCat) return;
+        var src = customPhotos[item.id] || item.img;
+        var card = document.createElement("div");
+        card.className = "item-card";
+        card.innerHTML =
+          '<div class="media-box">' +
+            '<span class="cat-badge">' + item.cat + '</span>' +
+            '<img src="' + src + '" alt="' + item.title + '" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />' +
+            '<div class="media-placeholder" style="display:none;">' +
+              '<div class="crest-glyph">▲</div>' +
+              '<span>' + item.title + '</span>' +
+            '</div>' +
+            '<button class="swap-photo-btn" data-id="' + item.id + '">📷 Swap Photo</button>' +
+          '</div>' +
+          '<div class="card-body">' +
+            '<div>' +
+              '<div class="item-title">' + item.title + '</div>' +
+              '<div class="item-desc">' + item.desc + '</div>' +
+            '</div>' +
+            '<div class="item-footer">' +
+              '<span class="item-price">$' + item.price.toLocaleString() + '</span>' +
+              '<button class="gold-btn add-bag-btn" data-id="' + item.id + '">Reserve Piece</button>' +
+            '</div>' +
+          '</div>';
+        grid.appendChild(card);
+      });
+    }
+
+    function renderBag() {
+      var box = document.getElementById("bagItems");
+      var total = 0;
+      document.getElementById("bagCount").textContent = bag.length;
+      if (bag.length === 0) {
+        box.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:10px 0;">Your private order bag is empty. Select a piece from the Lookbook or commission a Bespoke design.</div>';
+        document.getElementById("bagTotal").textContent = "$0";
+        return;
+      }
+      box.innerHTML = "";
+      bag.forEach(function(entry, idx) {
+        total += entry.price;
+        var row = document.createElement("div");
+        row.className = "bag-row";
+        row.innerHTML =
+          '<div><div style="color:var(--gold-bright);">' + entry.title + '</div><div style="font-size:11px; color:var(--text-muted);">' + entry.meta + '</div></div>' +
+          '<div style="display:flex; align-items:center; gap:8px;"><span>$' + entry.price.toLocaleString() + '</span><button class="remove-btn" data-idx="' + idx + '">✕</button></div>';
+        box.appendChild(row);
+      });
+      document.getElementById("bagTotal").textContent = "$" + total.toLocaleString();
+    }
+
+    document.getElementById("catPills").addEventListener("click", function(e) {
+      if (!e.target.classList.contains("pill")) return;
+      document.querySelectorAll(".pill").forEach(function(p) { p.classList.remove("active"); });
+      e.target.classList.add("active");
+      activeCat = e.target.getAttribute("data-cat");
+      renderCatalog();
+    });
+
+    document.getElementById("catalogGrid").addEventListener("click", function(e) {
+      if (e.target.classList.contains("add-bag-btn")) {
+        var id = e.target.getAttribute("data-id");
+        var found = ITEMS.find(function(i) { return i.id === id; });
+        if (found) {
+          bag.push({ title: found.title, price: found.price, meta: found.cat + " · Ready-to-Measure" });
+          renderBag();
+          showToast("Added to Private Order Bag");
+        }
+      }
+      if (e.target.classList.contains("swap-photo-btn")) {
+        pendingPhotoId = e.target.getAttribute("data-id");
+        document.getElementById("photoFileInput").click();
+      }
+    });
+
+    document.getElementById("photoFileInput").addEventListener("change", function(e) {
+      var file = e.target.files[0];
+      if (!file || !pendingPhotoId) return;
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        customPhotos[pendingPhotoId] = ev.target.result;
+        try { localStorage.setItem("mmcc_atelier_photos_v9", JSON.stringify(customPhotos)); } catch (err) {}
+        renderCatalog();
+        showToast("Lookbook photo updated");
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function setupSwatches(containerId) {
+      document.getElementById(containerId).addEventListener("click", function(e) {
+        if (!e.target.classList.contains("swatch")) return;
+        document.querySelectorAll("#" + containerId + " .swatch").forEach(function(s) { s.classList.remove("selected"); });
+        e.target.classList.add("selected");
+      });
+    }
+    setupSwatches("fabricSwatches");
+    setupSwatches("hardwareSwatches");
+
+    document.getElementById("addBespokeBtn").addEventListener("click", function() {
+      var parts = document.getElementById("bespokeBase").value.split("|");
+      var fab = document.querySelector("#fabricSwatches .selected").getAttribute("data-val");
+      var hw = document.querySelector("#hardwareSwatches .selected").getAttribute("data-val");
+      var notes = document.getElementById("bespokeNotes").value || "Bespoke Fitting";
+      bag.push({ title: parts[0], price: parseInt(parts[1], 10), meta: fab + " · " + hw + " · " + notes });
+      renderBag();
+      showToast("Bespoke commission added to bag");
+    });
+
+    document.getElementById("bagItems").addEventListener("click", function(e) {
+      if (e.target.classList.contains("remove-btn")) {
+        var idx = parseInt(e.target.getAttribute("data-idx"), 10);
+        bag.splice(idx, 1);
+        renderBag();
+      }
+    });
+
+    document.getElementById("checkoutBtn").addEventListener("click", function() {
+      if (bag.length === 0) { showToast("Add an item first"); return; }
+      bag = [];
+      renderBag();
+      showToast("Dispatched to Master Tailor Concierge");
+    });
+
+    document.querySelectorAll(".nav-btn").forEach(function(btn) {
+      btn.addEventListener("click", function() {
+        document.querySelectorAll(".nav-btn").forEach(function(b) { b.classList.remove("active"); });
+        btn.classList.add("active");
+        var target = btn.getAttribute("data-tab");
+        document.querySelectorAll(".section").forEach(function(s) { s.classList.remove("active"); });
+        document.getElementById("tab-" + target).classList.add("active");
+      });
+    });
+
+    document.getElementById("themeToggle").addEventListener("click", function() {
+      document.body.classList.toggle("emerald-theme");
+      this.textContent = document.body.classList.contains("emerald-theme") ? "Crimson Silk" : "Emerald Silk";
+    });
+
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js").catch(function() {});
+    }
+
+    renderCatalog();
+    renderBag();
+  </script>
+</body>
+</html>
