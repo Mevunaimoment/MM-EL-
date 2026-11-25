@@ -1,15 +1,18 @@
 {
-  "name": "MM'EL Music & Sound Lounge",
-  "short_name": "MM'EL Music",
+  "name": "24K Gold Pyramid & Crimson Silk Screensaver",
+  "short_name": "24K Screensaver",
+  "description": "Auto-looping 24K Gold Pyramid and Crimson Silk screensaver with Pure Artwork mode and offline custom .mp4 support.",
   "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#2a040d",
-  "theme_color": "#3a0714",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#140206",
+  "theme_color": "#140206",
   "icons": [
     {
-      "src": "mmel-icon.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
